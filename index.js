@@ -41,6 +41,22 @@ async function main() {
 
     socket.on("client:checkbox:change", async (data) => {
       console.log(`[Socket:${socket.id}]`, data);
+
+      // const lastOperationTime = rateLimitHashMap.get(socket.id);
+      const lastOperationTime = await redis.get(`rate-limiting:${socket.id}`);
+      if (lastOperationTime) {
+        const timeElapsed = Date.now() - lastOperationTime;
+        if (timeElapsed < 5 * 1000) {
+          socket.emit("server:error", {
+            error: "Only one event allowed in 5 seconds",
+            type: "warning",
+          });
+          return;
+        }
+      }
+
+      await redis.set(`rate-limiting:${socket.id}`, Date.now());
+
       const redisState = await getCheckboxDataFromRedis(CHECKBOX_STATE_KEY);
       redisState[data.index] = data.checked;
       await redis.set(CHECKBOX_STATE_KEY, JSON.stringify(redisState));
