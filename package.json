@@ -5,7 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node --watch index.js",
+    "start": "node index.js",
+    "check": "node --check index.js && node --check redis-connection.js",
+    "test": "pnpm run check"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +21,7 @@
   "dependencies": {
     "express": "^5.2.1",
     "ioredis": "^5.10.1",
+    "dotenv": "^16.1.4",
     "socket.io": "^4.8.3"
   }
 }

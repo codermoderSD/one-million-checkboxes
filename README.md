@@ -99,3 +99,44 @@ redis -> redis -> server -> users
   - Batching/compressing events
   - Robust backpressure and connection management
   - Monitoring and observability for event lag and Redis throughput
+
+## CI/CD: Render + Upstash (Free Tier)
+
+This repository includes a GitHub Actions workflow that runs checks and then triggers a Render deploy via Deploy Hook.
+
+### 1. Create a free Upstash Redis database
+
+- In Upstash, create a Redis database on the free tier.
+- Copy the Redis URL connection string.
+
+### 2. Create a Render Web Service
+
+- Create a new Web Service from this GitHub repo.
+- Build command: `pnpm install`
+- Start command: `pnpm start`
+- Add environment variable on Render:
+  - `REDIS_URL=<your_upstash_redis_url>`
+
+This app reads Redis config from `REDIS_URL` (or fallback `UPSTASH_REDIS_URL`).
+
+### 3. Add GitHub repository secrets
+
+Add these secrets in GitHub: Settings -> Secrets and variables -> Actions.
+
+- `RENDER_DEPLOY_HOOK_URL`: Render Deploy Hook URL for your service
+- `UPSTASH_REDIS_URL`: same Upstash Redis URL (used for CI connectivity validation)
+
+### 4. CI/CD behavior
+
+- On every push to `main`, workflow will:
+  - install dependencies with pnpm
+  - run syntax checks (`pnpm run check`)
+  - verify Redis env variable is present
+  - trigger Render deploy hook
+
+You can also run it manually from the Actions tab using `workflow_dispatch`.
+
+### 5. Notes for free tier
+
+- Render free services may spin down when idle.
+- Upstash free tier has request/storage limits; monitor usage in the Upstash dashboard.

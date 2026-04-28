@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: checkboxes-app
+    runtime: node
+    plan: free
+    autoDeploy: false
+    buildCommand: pnpm install
+    startCommand: pnpm start
+    envVars:
+      - key: REDIS_URL
+        sync: false
