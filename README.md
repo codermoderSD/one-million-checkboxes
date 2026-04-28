@@ -71,7 +71,7 @@ Open `http://localhost:8000` (or the port you started) and test with multiple ta
 - Single-server: simple, easy to run locally, but limited by one machine's connection capacity.
 - Multi-server (horizontal): run N app servers behind a load balancer and use Redis Pub/Sub to share events between instances.
 
-Scaling analogy: In your framing — if one server handles ~1000 connections, then 1000 servers can target roughly `1000 * 1000` aggregate connections, provided infrastructure, state strategy, and backpressure controls are designed correctly.
+Scaling analogy: In your framing - if one server handles ~1000 connections, then 1000 servers can target roughly `1000 * 1000` aggregate connections, provided infrastructure, state strategy, and backpressure controls are designed correctly.
 
 ## Multi-layer Redis (advanced)
 
@@ -139,4 +139,4 @@ You can also run it manually from the Actions tab using `workflow_dispatch`.
 ### 5. Notes for free tier
 
 - Render free services may spin down when idle.
-- Upstash free tier has request/storage limits; monitor usage in the Upstash dashboard.
+- Upstash free tier has request/storage limits; monitor usage in the Upstash dashboard and also in your application logs.
